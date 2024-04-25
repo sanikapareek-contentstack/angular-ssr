@@ -36,7 +36,7 @@ export function app(): express.Express {
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
-      .then((html) => res.send(html))
+      .then((html) => res.header('cache-control', 'public, max-age=10').send(html))
       .catch((err) => next(err));
   });
 
