@@ -1,0 +1,63 @@
+<div class="streaming-container">
+  <h1>Streaming Test Page</h1>
+  
+  <p class="description">
+    Click on any button below to test HTTP API streaming with real chunked transfer encoding at different speeds or buffered responses:
+  </p>
+
+  
+  <div class="button-group">
+    <button 
+      class="btn btn-slow" 
+      (click)="startHttpStreaming('slow')"
+      [disabled]="isStreaming">
+      Streaming (Slow)
+    </button>
+    
+    <button 
+      class="btn btn-medium" 
+      (click)="startHttpStreaming('medium')"
+      [disabled]="isStreaming">
+      Streaming (Medium)
+    </button>
+    
+    <button 
+      class="btn btn-fast" 
+      (click)="startHttpStreaming('fast')"
+      [disabled]="isStreaming">
+      Streaming (Fast)
+    </button>
+    
+    <button 
+      class="btn btn-buffered" 
+      (click)="getBufferedResponse()"
+      [disabled]="isStreaming">
+      Buffered Response
+    </button>
+    
+    <button 
+      class="btn btn-clear" 
+      (click)="clearOutput()"
+      [disabled]="isStreaming">
+      Clear
+    </button>
+  </div>
+
+  <div class="output-container">
+    <h3>Response Output:</h3>
+    <div class="output-box" [class.streaming]="isStreaming">
+      <p *ngIf="!currentOutput && !isStreaming" class="placeholder">
+        Welcome to the streaming test! This is a demonstration of streaming responses. The text appears progressively as if being streamed. You can test different streaming speeds: - Slow: 300ms delay between words - Medium: 150ms delay between words - Fast: 50ms delay between words This simulates real-time streaming like ChatGPT! Thank you for testing the streaming feature.
+      </p>
+      <p *ngIf="isStreaming && !currentOutput" class="loading">
+        Loading...
+      </p>
+      <p *ngIf="currentOutput" class="output-text">
+        {{ currentOutput }}
+      </p>
+      <div *ngIf="isStreaming" class="streaming-indicator">
+        <span class="cursor-blink">|</span>
+      </div>
+    </div>
+  </div>
+</div>

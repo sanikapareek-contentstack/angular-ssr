@@ -1,0 +1,12 @@
+.streaming-pill {
+  --pill-accent: #48dbfb !important;
+  background: linear-gradient(135deg, #48dbfb, #0abde3) !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.streaming-pill:hover {
+  background: linear-gradient(135deg, #0abde3, #00a8cc) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(72, 219, 251, 0.3);
+}
