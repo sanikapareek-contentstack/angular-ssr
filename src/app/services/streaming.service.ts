@@ -30,18 +30,15 @@ export class StreamingService {
           const readChunk = () => {
             reader.read().then(({ done, value }) => {
               if (done) {
-                console.log(`[${speed}] Streaming completed on client`);
                 observer.complete();
                 return;
               }
 
               const chunk = decoder.decode(value, { stream: true });
               accumulated += chunk;
-              console.log(`[${speed}] Received chunk: "${chunk}" (total length: ${accumulated.length})`);
               observer.next(accumulated);
               readChunk();
             }).catch(error => {
-              console.error(`[${speed}] Streaming error:`, error);
               observer.error(error);
             });
           };

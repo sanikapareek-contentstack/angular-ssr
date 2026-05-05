@@ -26,14 +26,10 @@ export function app(): express.Express {
     res.writeHead(200, {
       'Content-Type': 'text/plain; charset=utf-8',
       'Transfer-Encoding': 'chunked',
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      'Cache-Control': 'no-cache',
       'Connection': 'keep-alive',
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Cache-Control',
-      'X-Accel-Buffering': 'no', // Nginx buffering disable
-      'X-Content-Type-Options': 'nosniff'
+      'Access-Control-Allow-Headers': 'Cache-Control'
     });
 
     const words = sampleText.split(' ');
@@ -49,22 +45,12 @@ export function app(): express.Express {
 
     const sendNextChunk = () => {
       if (currentIndex < words.length) {
-        let chunk = '';
-        // Send up to 3 words per chunk
-        for (let i = 0; i < 3 && currentIndex < words.length; i++) {
-          if (currentIndex === 0) {
-            chunk += words[currentIndex];
-          } else {
-            chunk += ' ' + words[currentIndex];
-          }
-          currentIndex++;
-        }
-        console.log(`[${speed}] Sending chunk ${Math.ceil(currentIndex/3)}: "${chunk.trim()}"`);
-        res.write(chunk);
-        res.flushHeaders(); // Force flush
+        // Temporarily revert to single word to test basic functionality
+        const wordToSend = currentIndex === 0 ? words[currentIndex] : ' ' + words[currentIndex];
+        res.write(wordToSend);
+        currentIndex++;
         setTimeout(sendNextChunk, delay);
       } else {
-        console.log(`[${speed}] Streaming completed`);
         res.end();
       }
     };
