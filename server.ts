@@ -20,7 +20,7 @@ export function app(): express.Express {
   // Streaming API endpoints with chunked transfer encoding
   server.get('/api/stream/:speed', (req, res) => {
     const speed = req.params.speed;
-    const sampleText = 'Welcome to the HTTP streaming test! This is a real demonstration of server-side streaming responses with chunked transfer encoding. The text appears progressively as chunks are sent from the server. You can test different streaming speeds: - Slow: 300ms delay between words - Medium: 150ms delay between words - Fast: 50ms delay between words This simulates real-time HTTP streaming like ChatGPT uses! Thank you for testing the HTTP streaming feature.';
+    const sampleText = 'Welcome to the HTTP streaming test! This is a real demonstration of server-side streaming responses with chunked transfer encoding. The text appears progressively as chunks are sent from the server. You can test different streaming speeds: - Slow: 300ms delay between chunks (3 words) - Medium: 150ms delay between chunks (3 words) - Fast: 50ms delay between chunks (3 words) This simulates real-time HTTP streaming like ChatGPT uses! Thank you for testing the HTTP streaming feature.';
     
     // Set headers for chunked transfer encoding
     res.writeHead(200, {
@@ -43,18 +43,26 @@ export function app(): express.Express {
       case 'fast': delay = 50; break;
     }
 
-    const sendNextWord = () => {
+    const sendNextChunk = () => {
       if (currentIndex < words.length) {
-        const wordToSend = currentIndex === 0 ? words[currentIndex] : ' ' + words[currentIndex];
-        res.write(wordToSend);
-        currentIndex++;
-        setTimeout(sendNextWord, delay);
+        let chunk = '';
+        // Send up to 3 words per chunk
+        for (let i = 0; i < 3 && currentIndex < words.length; i++) {
+          if (currentIndex === 0) {
+            chunk += words[currentIndex];
+          } else {
+            chunk += ' ' + words[currentIndex];
+          }
+          currentIndex++;
+        }
+        res.write(chunk);
+        setTimeout(sendNextChunk, delay);
       } else {
         res.end();
       }
     };
 
-    sendNextWord();
+    sendNextChunk();
   });
 
   // Buffered response endpoint

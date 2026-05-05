@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class StreamingService {
 
-  private sampleText = 'Welcome to the streaming test! This is a demonstration of streaming responses. The text appears progressively as if being streamed. You can test different streaming speeds: - Slow: 300ms delay between words - Medium: 150ms delay between words - Fast: 50ms delay between words This simulates real-time streaming like ChatGPT! Thank you for testing the streaming feature.';
+  private sampleText = 'Welcome to the streaming test! This is a demonstration of streaming responses. The text appears progressively as if being streamed. You can test different streaming speeds: - Slow: 300ms delay between chunks (3 words) - Medium: 150ms delay between chunks (3 words) - Fast: 50ms delay between chunks (3 words) This simulates real-time streaming like ChatGPT! Thank you for testing the streaming feature.';
 
   constructor(private http: HttpClient) { }
 
